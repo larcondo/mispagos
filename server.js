@@ -9,7 +9,7 @@ require('dotenv').config();
 const PORT = process.env.PORT || 3000;
 
 // CORS: Cross Origin Resource Sharing
-const whiteList = ['http://localhost:5173', 'http://127.0.0.1:5173'];
+const whiteList = ['https://mispagos.onrender.com/', 'http://localhost:5173', 'http://127.0.0.1:5173'];
 const corsOptions = {
   credentials: true,
   origin: (origin, callback) => {

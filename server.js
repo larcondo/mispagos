@@ -9,7 +9,13 @@ require('dotenv').config();
 const PORT = process.env.PORT || 3000;
 
 // CORS: Cross Origin Resource Sharing
-const whiteList = ['https://mispagos.onrender.com', 'http://localhost:5173', 'http://127.0.0.1:5173'];
+const whiteList = [
+  'https://mispagos.onrender.com',
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  'http://localhost:3000',
+  'https://mispagos.3.us-1.fl0.io',
+];
 const corsOptions = {
   credentials: true,
   origin: (origin, callback) => {
@@ -30,6 +36,8 @@ app.use(cors(corsOptions));
 app.use(cookieParser());
 
 app.use(express.json());
+
+app.use(express.static('dist'));
 
 // Database
 mongoose.connect(process.env.DATABASE_URI)

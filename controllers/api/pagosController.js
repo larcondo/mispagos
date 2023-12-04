@@ -81,9 +81,58 @@ const deletePago = async (req, res) => {
   }
 };
 
+// ------------------------------------------------------
+// RESUMEN USUARIO (SUMMARY)
+// ------------------------------------------------------
+const summary = async (req, res) => {
+  const username = req.user.name
+  const today = new Date()
+  const mm = today.toLocaleString('default', { month: 'numeric' })
+  const yyyy = today.toLocaleString('default', { year: 'numeric' })
+  const mname = today.toLocaleString('default', { month: 'long' })
+  const lastMonth = `${yyyy}-${mm}`
+
+  try {
+    const lastEight = await Pagos
+      .find({ username: username })
+      .sort({ fecha: -1 })
+      .limit(8)
+
+    const pagosLastMonth = await Pagos
+      .find({ username: username, fecha: { $regex: lastMonth }})
+      .sort({ fecha: -1 })
+
+    let values = null
+
+    if (pagosLastMonth.length > 0) {
+      const importesLastMonth = pagosLastMonth.map(p => p.importe)
+      values = {
+        min: Math.min(...importesLastMonth),
+        max: Math.max(...importesLastMonth),
+        total: importesLastMonth.reduce((acc, cv) => acc + cv, 0),
+        quantity: importesLastMonth.length,
+        monthName: mname.charAt(0).toUpperCase() + mname.slice(1),
+      }
+      values.average = values.total / values.quantity
+    }   
+
+    res.status(200).send({
+      message: 'summary',
+      lastMonth: lastMonth,
+      values,
+      pagosLastMonth,
+      lastEight,
+    })
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({ message: 'Hubo un error al obtener los pagos' });
+  }
+}
+
 module.exports = {
   getPagos,
   addPago,
   updatePago,
-  deletePago
+  deletePago,
+  summary,
 }

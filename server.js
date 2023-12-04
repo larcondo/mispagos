@@ -45,12 +45,13 @@ mongoose.connect(process.env.DATABASE_URI)
   .catch( error => console.log(error));
 
 // routes
-app.use('/', require('./routes/root'));
-app.use('/register', require('./routes/register'));
-app.use('/refresh', require('./routes/refresh'));
-app.use('/logout', require('./routes/logout'));
-app.use('/config', require('./routes/config'));
-app.use('/pagos', require('./routes/api/pagos'));
+app.use('/info', require('./routes/root'));
+app.use('/api/login', require('./routes/login'));
+app.use('/api/register', require('./routes/register'));
+app.use('/api/refresh', require('./routes/refresh'));
+app.use('/api/logout', require('./routes/logout'));
+app.use('/api/config', require('./routes/config'));
+app.use('/api/pagos', require('./routes/api/pagos'));
 
 app.all('*', (req, res) => {
   res.status(404);

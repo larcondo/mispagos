@@ -56,9 +56,9 @@ const addPago = async (req, res) => {
   if (typeof(pagoData.importe) !== 'number') return res.status(400).send({ message: 'Tipo erróneo de <importe>. Debe ser: numero.' });
 
   try {
-    await Pagos.insertMany(pagoData);
-
-    res.send({ message: 'Pago agregado correctamente', pagoData });
+    // const updated = await Pagos.insertMany(pagoData);
+    const added = await Pagos.create(pagoData);
+    res.send({ message: 'Pago agregado correctamente', added });
   } catch (err) {
     console.log(err);
     res.send({ message: 'Hubo un error al agregar el pago' });
@@ -73,12 +73,8 @@ const updatePago = async (req, res) => {
   const pagoId = req.params.id;
 
   try {
-    const resultado = await Pagos.updateOne(
-      { _id: pagoId },
-      { $set: pagoData }
-    );
-    // console.log(resultado);
-    res.status(200).send({ message: 'Pago actualizado correctamente'});
+    const updated = await Pagos.findByIdAndUpdate(pagoId, pagoData, { returnDocument: 'after'})
+    res.status(200).send({ message: 'Pago actualizado correctamente', updated });
   } catch (err) {
     console.log(err);
     res.status(500).send({ message: 'Hubo un error al actualizar el pago' });
@@ -93,12 +89,11 @@ const deletePago = async (req, res) => {
   const pagoId = req.params.id;
 
   try {
-    const resultado = await Pagos.deleteOne({ _id: pagoId });
-    const deletedCount = resultado.deletedCount;
-    if (deletedCount === 1) {
-      res.send({ message: `El pago con el id: ${pagoId} se eliminó correctamente`});
+    const deleted = await Pagos.findByIdAndDelete(pagoId);
+    if (deleted) {
+      res.status(200).send({ message: 'Pago eliminado correctamente', deleted });
     } else {
-      res.send({ message: `No se encontró un pago con el id: ${pagoId}`});
+      res.sendStatus(203);
     }
   } catch (err) {
     console.log(err);

@@ -115,7 +115,7 @@ const summary = async (req, res) => {
   const mm = today.toLocaleString('default', { month: 'numeric' })
   const yyyy = today.toLocaleString('default', { year: 'numeric' })
   const mname = today.toLocaleString('default', { month: 'long' })
-  const lastMonth = `${yyyy}-${mm}`
+  const lastMonth = `${yyyy}-${mm.padStart(2,0)}`
 
   try {
     const lastEight = await Pagos

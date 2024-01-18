@@ -8,7 +8,32 @@ const getPagos = async (req, res) => {
   try {
     const resultado = await Pagos.find({ username: req.user.name }).sort({ fecha: -1 });
 
-    res.status(200).send({ message: 'getPagos', resultado });
+    // (Opciones) Distintos detalles
+    const detalles = await Pagos.distinct('detalle', { username: req.user.name });
+    
+    // (Opciones) Distintos años
+    const aux = await Pagos.distinct('fecha', { username: req.user.name });
+    const aux2 = aux.map( f => f.split('-')[0])
+    const years = [...new Set(aux2)].sort((a, b) => b - a);   // recent first
+    
+    // (Opciones) Distintos meses
+    const months = [
+      '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12',
+    ]
+    
+    // (Opciones) Distintos tipos
+    const tipos = await Pagos.distinct('tipo', { username: req.user.name });
+
+    res.status(200).send({ 
+      message: 'getPagos',
+      options: {
+        detalles,
+        months,
+        years,
+        tipos,
+      },
+      resultado,
+    });
   } catch (err) {
     console.log(err);
     res.status(500).send({ message: 'Hubo un error al obtener los pagos' });

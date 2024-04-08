@@ -1,4 +1,5 @@
 const Pagos = require('../../schemas/Pagos');
+const mongoose = require('mongoose');
 
 // ------------------------------------------------------
 // OBTENER LOS PAGOS
@@ -46,7 +47,7 @@ const getPagos = async (req, res) => {
 // ------------------------------------------------------
 const addPago = async (req, res) => {
   const pagoData = req.body;
-  const camposObligatorios = [ 'tipo', 'fecha', 'detalle', 'importe', 'username' ];
+  const camposObligatorios = [ 'tipo', 'fecha', 'detalle', 'importe' ];
 
   // Pasar estas verificaciones a un middleware
   for (let campo of camposObligatorios) {
@@ -57,8 +58,8 @@ const addPago = async (req, res) => {
 
   try {
     // const updated = await Pagos.insertMany(pagoData);
-    const added = await Pagos.create(pagoData);
-    res.send({ message: 'Pago agregado correctamente', added });
+    const added = await Pagos.create({...pagoData, username: req.user.name });
+    res.status(201).send({ message: 'Pago agregado correctamente', added });
   } catch (err) {
     console.log(err);
     res.send({ message: 'Hubo un error al agregar el pago' });
@@ -71,6 +72,12 @@ const addPago = async (req, res) => {
 const updatePago = async (req, res) => {
   const pagoData = req.body;
   const pagoId = req.params.id;
+
+  if(!mongoose.Types.ObjectId.isValid(pagoId)) {
+    return res
+      .status(400)
+      .send({ message: 'El formato de id no es correcto.' });
+  }
 
   try {
     const updated = await Pagos.findByIdAndUpdate(pagoId, pagoData, { returnDocument: 'after'})

@@ -2,10 +2,10 @@ const RefreshTokens = require('../schemas/RefreshTokens');
 
 const handleLogout = async (req, res) => {
   const cookies = req.cookies;
+  const { refreshToken } = cookies;
 
-  if (!cookies?.refreshToken) return res.sendStatus(401);
-  const refreshToken = cookies.refreshToken;
-  // console.log(`Refresh: ${refreshToken}`)
+  // check if cookies object has a null prototype (no cookies set)
+  if (!Object.getPrototypeOf(cookies)) return res.sendStatus(401);
   
   if ( refreshToken === null || refreshToken === undefined ) return res.status(400).send({ message: 'Refresh Token required'});
   
@@ -13,7 +13,7 @@ const handleLogout = async (req, res) => {
   // if ( name === null || name === undefined ) return res.status(400).send({ message: 'Nombre de usuario requerido'});
   
   try {
-    const resultado = await RefreshTokens.deleteOne({ token: refreshToken });
+    await RefreshTokens.deleteOne({ token: refreshToken });
     // consssole.log(resultado);
     res.clearCookie('refreshToken', { httpOnly: true, secure: true });
     res.status(200).send({ message: 'Logout successfully' });

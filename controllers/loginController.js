@@ -11,12 +11,12 @@ const handleLogin = async (req, res) => {
 
   // Validacion de 'name'
   if (userInfo.name === null || userInfo.name === undefined) {
-    res.send({ message: 'El nombre del usuario es requerido.' });
+    res.status(400).send({ message: 'El nombre del usuario es requerido.' });
     return
   }
   // Validacion de 'password'
   if (userInfo.password === null || userInfo.password === undefined) {
-    res.send({ message: 'El password del usuario es requerido.' });
+    res.status(400).send({ message: 'El password del usuario es requerido.' });
     return
   }
 

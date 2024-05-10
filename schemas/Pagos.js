@@ -19,4 +19,10 @@ const pagosSchema = mongoose.Schema({
   }
 });
 
+pagosSchema.set('toJSON', {
+  transform: (doc, returnedObj) => {
+    delete returnedObj.__v
+  }
+});
+
 module.exports = mongoose.model('Pagos', pagosSchema);

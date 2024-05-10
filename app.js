@@ -54,6 +54,7 @@ app.use('/api/refresh', require('./routes/refresh'));
 app.use('/api/logout', require('./routes/logout'));
 app.use('/api/config', require('./routes/config'));
 app.use('/api/pagos', require('./routes/api/pagos'));
+app.use('/api/demo', require('./routes/api/demo'));
 
 if (process.env.NODE_ENV === 'test') {
   app.use('/api/testing', require('./routes/testing'));

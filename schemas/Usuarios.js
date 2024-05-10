@@ -24,4 +24,10 @@ const usuariosSchema = mongoose.Schema({
   password: String,
 });
 
+usuariosSchema.set('toJSON', {
+  transform: (doc, returnedObj) => {
+    delete returnedObj.__v
+  }
+});
+
 module.exports = mongoose.model('Usuarios', usuariosSchema);

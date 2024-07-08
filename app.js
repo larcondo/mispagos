@@ -7,13 +7,7 @@ const cors = require('cors');
 require('dotenv').config();
 
 // CORS: Cross Origin Resource Sharing
-const whiteList = [
-  'https://mispagos.onrender.com',
-  'http://localhost:5173',
-  'http://127.0.0.1:5173',
-  'http://localhost:3000',
-  'https://mispagos.3.us-1.fl0.io',
-];
+const whiteList = [process.env.HOST_URL]
 const corsOptions = {
   credentials: true,
   origin: (origin, callback) => {
@@ -27,8 +21,6 @@ const corsOptions = {
 }
 
 app.use(cors(corsOptions));
-// app.use(cors({credentials: true, origin: 'http://127.0.0.1:5173'}))
-// app.use(cors());   // sin opciones (permite todo)
 
 //middleware for cookies
 app.use(cookieParser());

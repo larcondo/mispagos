@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build:ui": "rm -rf dist && cd ../frontend/ && npm run build && cp -r dist ../backend",
-    "start": "node api/index.js",
-    "dev": "nodemon api/index.js",
+    "start": "node index.js",
+    "dev": "nodemon index.js",
     "test": "jest --verbose --detectOpenHandles --testPathPattern='__tests__\/(.*).test.js$"
   },
   "author": "Lucas",
